@@ -21,12 +21,9 @@ def count_sum_increase(data):
     prev_sum = data[0] + data[1] + data[2]
     cnt = 0
 
-    for idx in range(1, len(data)):
-        if idx + 2 == len(data):
-            break
-        else:
-            curr_sum = data[idx] + data[idx + 1] + data[idx + 2]
-            if prev_sum < curr_sum:
-                cnt += 1
-            prev_sum = curr_sum
+    for idx in range(1, len(data) - 2):
+        curr_sum = data[idx] + data[idx + 1] + data[idx + 2]
+        if prev_sum < curr_sum:
+            cnt += 1
+        prev_sum = curr_sum
     return cnt
