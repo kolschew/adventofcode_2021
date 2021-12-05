@@ -1,10 +1,11 @@
-# adventofcode_2021
+# Advent of Code 2021
 My contributions to the advent of code 2021!
 
 What did I learn during this challenge:
 
 ### Day 3
 - One can access the ith character in a dataframes containing of strings by df.str[i], which really came in handy during this task. Of course one can also split the different numbers with df.split() but the former approach seemed to be the most direct way for me.
+- When working with Counters, cnt.most_common(x) is a really helpful thing. It returns the x most common entries; the least common ones can be accessed via cnt.most_common(x)[::-1].
 
 ### Day 5
 - It is relatively annoying to create lists/vectors between two integers if you do not know whether your first argument 'x1' is larger than your second 'x2'.
