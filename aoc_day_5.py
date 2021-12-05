@@ -2,8 +2,6 @@ import pandas as pd
 import numpy as np
 from collections import Counter
 
-# I want to check the slope of the lines and since 90° corresponds to a slope of inf, I set of the errstate for that #
-np.seterr(divide='ignore')
 
 # Pandas surely is awesome for reading in data because of its versatility! #
 file = 'input_puzzles/day_5_test.txt'
