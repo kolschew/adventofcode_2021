@@ -7,6 +7,9 @@ What did I learn during this challenge:
 - One can access the ith character in a dataframes containing of strings by df.str[i], which really came in handy during this task. Of course one can also split the different numbers with df.split() but the former approach seemed to be the most direct way for me.
 - When working with Counters, cnt.most_common(x) is a really helpful thing. It returns the x most common entries; the least common ones can be accessed via cnt.most_common(x)[::-1].
 
+### Day 4
+- I started with an unfortunate choice for the data format in that I used an array of arrays for the bingo boards. Because of the peculiar structure of that array I had to code arround a number of issues when iterating through the boards and especially when deleting them for the second part (when redefining a vector while iterrating over it all other changes on it might be rolled back if not careful). What did I learn? If you realize that your data format is unfortunate, don't be stubborn - just go with something else... 
+
 ### Day 5
 - It is relatively annoying to create lists/vectors between two integers if you do not know whether your first argument 'x1' is larger than your second 'x2'.
 Both range() and numpy.arange() need to receive explicitly -1 as a third argument if that is the case. In addition both do **not** automatically include the endpoint.
