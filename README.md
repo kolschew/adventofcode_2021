@@ -8,6 +8,7 @@ What did I learn during this challenge:
 - When working with Counters, cnt.most_common(x) is a really helpful thing. It returns the x most common entries; the least common ones can be accessed via cnt.most_common(x)[::-1].
 
 ### Day 4
+- When operating on a numpy array it is advisable to use numpy.copy() in the functions at hand, because otherwise you will change your input data.
 - I started with an unfortunate choice for the data format in that I used an array of arrays for the bingo boards. Because of the peculiar structure of that array I had to code arround a number of issues when iterating through the boards and especially when deleting them for the second part (when redefining a vector while iterating over it all other changes on it might be rolled back if not careful). What did I learn? If you realize that your data format is unfortunate, don't be stubborn - just restart with something else... 
 
 ### Day 5
