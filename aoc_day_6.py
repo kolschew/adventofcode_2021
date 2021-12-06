@@ -19,5 +19,6 @@ def count_fish(fish_data, days):
         fish[6] += popped
     return sum(fish)
 
+
 print(f'Part 1: {count_fish(df5, 80)}.')
 print(f'Part 2: {count_fish(df5, 256)}.')
