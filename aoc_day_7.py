@@ -2,7 +2,7 @@
 This problem absolutely cries for numpy. Mathematically the position which has the least linear distance
 to all datapoints is simply the median. For the second part the best alignment position is the mean rounded down
 to the next integer, because we want to now weigh the difference accordingly. The closed form for a sum of integers is
-known thanks to 7 year old Gauss: sum(x, 0, n) = (n^2 + n) / 2.
+known thanks to 9 year old Gauss: sum(x, 0, n) = (n^2 + n) / 2.
 """
 import numpy as np
 
