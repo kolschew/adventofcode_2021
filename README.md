@@ -22,4 +22,5 @@ which resets the indices and throughs the old ones away.
 - Your best guess for iterating through two lists at the same time without nesting them seems to actually be by indices. 
 
 ### Day 8
-- The maybe fastest way to get the key of a dictionary by a given value might be _list(my_dict.keys())[list(my_dict.values()).index(set(out))]_. Even though it might look a little clumsy it does work and the performance should be absolutely fine for all purposes in which this is used.
+- The maybe fastest way to get the key of a dictionary by a given value might be _list(my_dict.keys())[list(my_dict.values()).index(my_value)]_. Even though it might look a little clumsy it does work and the performance should be absolutely fine for all purposes in which this is used.
+- I could for the first time use defaultdict substantially and I was very happy that I had remembered it existed as it helped tremendously with this task
