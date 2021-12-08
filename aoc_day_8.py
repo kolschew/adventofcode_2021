@@ -29,13 +29,6 @@ class SubmarineInterface:
                 cnt += 1
         return cnt
 
-    def decode_outputs(self, inputs: str, outputs: str):
-        result = ''
-        decode = self.decode_wires(inputs)
-        for out in outputs.split(' '):
-            result += str(list(decode.keys())[list(decode.values()).index(set(out))])
-        return int(result)
-
     @staticmethod
     def decode_wires(line: str):
         wires = defaultdict(set)
@@ -64,6 +57,13 @@ class SubmarineInterface:
                 else:
                     pass
         return wires
+
+    def decode_outputs(self, inputs: str, outputs: str):
+        result = ''
+        decode = self.decode_wires(inputs)
+        for out in outputs.split(' '):
+            result += str(list(decode.keys())[list(decode.values()).index(set(out))])
+        return int(result)
 
 
 file = 'input_puzzles/day_8.txt'
