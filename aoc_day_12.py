@@ -1,7 +1,8 @@
-from collections import defaultdict
+from collections import defaultdict, Counter
 
 file = 'input_puzzles/day_12_test.txt'
 
+# Create a dict with all nodes and connections #
 with open(file, 'r') as f:
     graphs = defaultdict(list)
     for line in f.read().splitlines():
@@ -9,25 +10,40 @@ with open(file, 'r') as f:
         graphs[a].append(b)
         graphs[b].append(a)
 
-_small_caves = [key for key in graphs.keys() if key.islower()]
+_cave_name_len = len(graphs['start'][0])  # Assumes start and end are never directly connected
 
 
-def pathfinder(startvert, visited, current_path, pathcount):
+def find_first_lowercase(s):
+    """Function returns first lowercase letter and '' if there are none"""
+    lowercases = [ii for ii in s if ii.islower()]
+    if not lowercases:
+        return ''
+    else:
+        return lowercases[0]
+
+
+def pathfinder(startvert='start', visited={'start'}, current_path='', pathcount={}):
+    """Function to find all paths through the cave system from given startvertex
+       Returns: Dictionary of all paths
+     """
+
     for vert in graphs[startvert]:
-        print(vert)
-        if vert in visited and vert in _small_caves:
-            print(f'Small cave visited at {vert}')
+        if vert in visited and vert.islower():
             continue
         elif vert == 'end':
-            print(f'End reached')
             pathcount[current_path] = 1
-            print(f'Added {current_path} to pathcount')
-            current_path = ''
-            visited = {'start'}
             continue
         else:
-            visited.add(vert)
+            if vert.islower():
+                visited.add(vert)
             current_path += vert
-            print(f'Restarting recursion at vertex {vert} and visited:{visited} and current path: {current_path}')
             pathfinder(vert, visited, current_path, pathcount)
+
+            # Removes path again from visited and current path after recursion step #
+            current_path = current_path[:-_cave_name_len]
+            if vert.islower():
+                visited.remove(vert)
     return pathcount
+
+
+print(f'Part 1: {len(pathfinder())}')

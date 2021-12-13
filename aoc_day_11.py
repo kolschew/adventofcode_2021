@@ -52,6 +52,7 @@ class OctupusFlashes:
         field = deepcopy(input)
         fullsync = []
         flashcnt = 0
+
         for cyc in range(cycles):
             field += 1
             while np.any(field > 9):
