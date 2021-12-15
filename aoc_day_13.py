@@ -1,5 +1,7 @@
 import re
 import numpy as np
+import matplotlib.pyplot as plt
+from copy import deepcopy
 
 file = 'input_puzzles/day_13.txt'
 with open(file, 'r') as f:
@@ -14,7 +16,8 @@ class FoldingPaper:
 
     def __init__(self, data):
         self.instructions = self.parse_instructions(data)
-        self.paper = self.parse_grid(self.get_coordinates(data))
+        self.coordinates = self.get_coordinates(data)
+        self.paper = self.parse_grid(self.coordinates)
 
     @staticmethod
     def get_coordinates(coords_in):
@@ -43,7 +46,12 @@ class FoldingPaper:
         return grid
 
     @staticmethod
-    def fold(paper, axis, position):
+    def fold(paper, instruction):
+        """
+        Folds paper for given instruction. Input must be 2d array and list = [axis: str, position: int]
+        Returns: Folded 2d array
+        """
+        axis, position = instruction[0], instruction[1]
         if axis == 'y':
             fold_onto = paper[:position, :]
             fold_over = np.flipud(np.delete(paper[position:, :], 0, axis=0))
@@ -54,6 +62,23 @@ class FoldingPaper:
             raise NameError('This axis does not exist')
         return fold_onto | fold_over
 
+    @staticmethod
+    def convert_paper_to_picture(paper):
+        """Converts 2d array to pixels"""
+        plt.imshow(paper, interpolation='nearest')
+        return
+
+    def fold_several(self, paper, instruction, folds=None):
+        """Performs several subsequent folds. If folds is provided only that amount of folds will be done."""
+        folded = deepcopy(paper)
+        for idx, inst in enumerate(instruction):
+            if idx == folds:
+                break
+            else:
+                folded = self.fold(folded, inst)
+        return folded
+
 
 fp = FoldingPaper(puzzle_data)
-print(f'Part 1: {np.sum(fp.fold(fp.paper, fp.instructions[0][0], fp.instructions[0][1]))}')
+print(f'Part 1: {np.sum(fp.fold(fp.paper, fp.instructions[0]))}')
+fp.convert_paper_to_picture(fp.fold_several(fp.paper, fp.instructions)) # Part 2 :)

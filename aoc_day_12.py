@@ -26,9 +26,11 @@ def pathfinder(startvert='start', visited={'start'}, current_path='', pathcount=
             pathcount[current_path] = 1
             continue
         else:
-            if vert.islower():
-                visited.add(vert)
             current_path += vert
+            if vert.islower() and 2 in Counter([s for s in current_path if s.islower()]).values():
+                visited.add(vert)
+            else:
+                pass
             pathfinder(vert, visited, current_path, pathcount)
             current_path = current_path[:-_cave_name_len]
             if vert in visited:
@@ -37,7 +39,7 @@ def pathfinder(startvert='start', visited={'start'}, current_path='', pathcount=
 
 
 # Someone elses basic architecture which I restructured to return all paths in a list #
-def count_paths(final_paths, cave="start", visited={"start"}, path='start', allow_small_cave=False) -> list[str]:
+def count_paths(final_paths, cave="start", visited={"start"}, path='start', allow_small_cave=False):
     if cave == "end":
         final_paths.append(path)
         return
