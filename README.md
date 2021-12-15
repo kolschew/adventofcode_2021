@@ -5,7 +5,7 @@ What did I learn during this challenge:
 
 ### Day 3
 - One can access the ith character in a dataframes containing of strings by df.str[i], which really came in handy during this task. Of course one can also split the different numbers with df.split() but the former approach seemed to be the most direct way for me.
-- When working with Counters, cnt.most_common(x) is a really helpful thing. It returns the x most common entries; the least common ones can be accessed via cnt.most_common(x)[::-1].
+- When working with Counters, cnt.most_common(x) is a really helpful thing. It returns the x most common entries; the least common ones can be accessed via cnt.most_common()[-1].
 
 ### Day 4
 - When operating on a numpy array it is advisable to use numpy.copy() in the functions at hand, because otherwise you will change your input data.
