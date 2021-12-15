@@ -27,3 +27,8 @@ which resets the indices and throughs the old ones away.
 
 ### Day 11
 - I tried too long to find out how to access certain fields in a 2d array by index which also fullfil a condition like > 0. One can access several indices in a 2d array arr in numpy with arr[rows, cols] where rows and cols must be matching arrays for the index positions. For example rows = [1,2] and cols = [3,4] would give the two entries at (1,3) and (2,4). However if one also wants to impose another condition on these, this becomes difficult. The syntax for several logic masks in numpy is arr[(cond1) & (cond2)], but one of these being the indices has to be passed with a boolean mask matching the size of the array. Therefore what works is to create a mask with the correct size mask = np.zeros([sizey, sizex], dtype=bool) and then manipulate its entries with the indices mask[rows, cols] = True. Then we can use it for indexing like arr[mask & arr > 0] which gives only the chosen indices if they are larger than zero. I ended up not using this, but it will maybe be important in the future and I didn't want to forget it.
+
+### Day 13
+- Bitwise or's operator is simply | in python and also works on numpy arrays! That saved a lot of code when folding the paper together
+- Numpy has almost everything one could ever need built in. Here folding basically ment to flip parts of the original array and this can be done by either fliplr (for flipping the y axis) or flipud (for flipping the x axis). 
+- matplotlibs imshow(array, interpolation='nearest') returns a picture from a given 2d array
