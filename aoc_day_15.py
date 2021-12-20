@@ -9,6 +9,7 @@ grid_input = np.array([list(d) for d in data], dtype=int)
 
 # Code runs really slow - Check if heap increases runtime
 
+
 class ShortestPath:
     def __init__(self, grid):
         self.grid = grid
