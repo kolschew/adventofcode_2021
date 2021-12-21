@@ -56,6 +56,13 @@ def decode(bin_input, ii, final_dict):
         return ii, final_dict
 
 
+def appender(dict, subpack, id):
+    if id == 0:
+        dict['sum'].append(sum(subpack))
+    elif id == 1:
+        dict['']
+
+
 with open(file, 'r') as f:
     hex_data = f.read()
 
