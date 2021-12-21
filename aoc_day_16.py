@@ -1,4 +1,6 @@
 from collections import defaultdict
+from functools import reduce
+
 file = 'input_puzzles/day_16.txt'
 
 
@@ -12,10 +14,8 @@ def decode(bin_input, ii, final_dict):
         return len(bin_input), final_dict
 
     # Get version and type ID and append to dict
-    version = int(bin_input[ii:ii + 3], 2)
-    typeID = int(bin_input[ii + 3:ii + 6], 2)
-    final_dict['versions'].append(version)
-    final_dict['IDs'].append(typeID)
+    final_dict['versions'].append(int(bin_input[ii:ii + 3], 2))
+    final_dict['IDs'].append(typeID := int(bin_input[ii + 3:ii + 6], 2))
     ii += 6
 
     # Extraction of literal number
@@ -39,43 +39,74 @@ def decode(bin_input, ii, final_dict):
         length = int(bin_input[ii + 1:ii + 16], 2)
         ii += 16
         breaker = ii + length
+        subdict = defaultdict(list)
 
         while ii <= breaker:
-            ii, final_dict = decode(bin_input, ii, final_dict)
-
-        return ii, final_dict
+            ii, subdict = decode(bin_input, ii, subdict)
 
     # Extraction of subpacket by number of packets
     elif lengthID == 1:
         subpacks = int(bin_input[ii + 1:ii + 12], 2)
         ii += 12
+        subdict = defaultdict(list)
 
         for cnt in range(subpacks):
-            ii, final_dict = decode(bin_input, ii, final_dict)
+            ii, subdict = decode(bin_input, ii, subdict)
 
-        return ii, final_dict
+    final_dict['versions'] += subdict['versions']
+    final_dict['IDs'] += subdict['IDs']
+    final_dict['literals'].append(appender(subdict['literals'], typeID))
+
+    return ii, final_dict
 
 
-def appender(dict, subpack, id):
+def appender(subpack, id):
     if id == 0:
-        dict['sum'].append(sum(subpack))
+        return sum(subpack)
     elif id == 1:
-        dict['']
+        return reduce(lambda x, y: x*y, subpack)
+    elif id == 2:
+        return min(subpack)
+    elif id == 3:
+        return max(subpack)
+    elif id == 5:
+        return int(subpack[0] > subpack[1])
+    elif id == 6:
+        return int(subpack[0] < subpack[1])
+    elif id == 7:
+        return int(subpack[0] == subpack[1])
+    return
 
+
+def tester(ids, literals, litcnt):
+    for ii in range(len(ids)):
+        if ids[ii] == 4:
+            lit = literals[litcnt]
+            litcnt += 1
+            return lit
+        else:
+            return tester(ids[ii:], literals, litcnt)
 
 with open(file, 'r') as f:
     hex_data = f.read()
 
 bin_data = hex_to_bin(hex_data)
-lit_test = hex_to_bin('D2FE28')
-sub_len_test = hex_to_bin('38006F45291200')
-sub_cnt_test = hex_to_bin('EE00D40C823060')
-test_1 = hex_to_bin('8A004A801A8002F478')
-test_2 = hex_to_bin('620080001611562C8802118E34')
-test_3 = hex_to_bin('C0015000016115A2E0802F182340')
-test_4 = hex_to_bin('A0016C880162017C3686B18A3D4780')
 
-assert sum(decode(test_1, 0, defaultdict(list))[1]['versions']) == 16
-assert sum(decode(test_2, 0, defaultdict(list))[1]['versions']) == 12
-assert sum(decode(test_3, 0, defaultdict(list))[1]['versions']) == 23
-assert sum(decode(test_4, 0, defaultdict(list))[1]['versions']) == 31
+# Assertions for part 1 #
+assert sum(decode(hex_to_bin('8A004A801A8002F478'), 0, defaultdict(list))[1]['versions']) == 16
+assert sum(decode(hex_to_bin('620080001611562C8802118E34'), 0, defaultdict(list))[1]['versions']) == 12
+assert sum(decode(hex_to_bin('C0015000016115A2E0802F182340'), 0, defaultdict(list))[1]['versions']) == 23
+assert sum(decode(hex_to_bin('A0016C880162017C3686B18A3D4780'), 0, defaultdict(list))[1]['versions']) == 31
+
+# Assertions for part 2 #
+# assert decode(hex_to_bin('C200B40A82'), 0, defaultdict(list))[1]['literals'][0] == 3
+# assert decode(hex_to_bin('04005AC33890'), 0, defaultdict(list))[1]['literals'][0] == 54
+# assert decode(hex_to_bin('880086C3E88112'), 0, defaultdict(list))[1]['literals'][0] == 7
+# assert decode(hex_to_bin('CE00C43D881120'), 0, defaultdict(list))[1]['literals'][0] == 9
+# assert decode(hex_to_bin('D8005AC2A8F0'), 0, defaultdict(list))[1]['literals'][0] == 1
+# assert decode(hex_to_bin('F600BC2D8F'), 0, defaultdict(list))[1]['literals'][0] == 0
+# assert decode(hex_to_bin('9C005AC2F8F0'), 0, defaultdict(list))[1]['literals'][0] == 0
+# assert decode(hex_to_bin('9C0141080250320F1802104A08'), 0, defaultdict(list))[1]['literals'][0] == 1
+
+res_1 = sum(decode(bin_data, 0, defaultdict(list))[1]['versions'])
+print(f'Part 1: {res_1}')
