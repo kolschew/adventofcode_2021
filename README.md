@@ -32,3 +32,7 @@ which resets the indices and throughs the old ones away.
 - Bitwise or's operator is simply | in python and also works on numpy arrays! That saved a lot of code when folding the paper together
 - Numpy has almost everything one could ever need built in. Here folding basically ment to flip parts of the original array and this can be done by either fliplr (for flipping the y axis) or flipud (for flipping the x axis). 
 - matplotlibs imshow(array, interpolation='nearest') returns a picture from a given 2d array
+
+### Day 16
+- Check EXTREMELY thoroughly whether you want "<" or "<=" ... 
+- defaultdict was maybe not the best datatype here, but I still decided to go with it and it did work out relatively well. However namedtuple seems to be very nice for tasks where you want to keep track of subparts of a recursive program.
