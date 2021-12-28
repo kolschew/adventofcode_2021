@@ -10,8 +10,8 @@ def hex_to_bin(hex_input):
 
 def decode(bin_input, ii, final_dict):
     # Termination condition for recursion
-    if '1' not in bin_input[ii:] or ii >= len(bin_input):
-        return len(bin_input), final_dict
+    if '1' not in bin_input[ii:]:
+        return ii, final_dict['value'], final_dict
 
     # Get version and type ID and append to dict
     final_dict['versions'].append(int(bin_input[ii:ii + 3], 2))
@@ -30,37 +30,37 @@ def decode(bin_input, ii, final_dict):
                 break
         final_dict['literals'].append(int(literal, 2))
 
-        return ii, final_dict
+        return ii, int(literal, 2), final_dict
 
     lengthID = int(bin_input[ii])
-
     # Extraction of subpacket by length
     if lengthID == 0:
         length = int(bin_input[ii + 1:ii + 16], 2)
         ii += 16
         breaker = ii + length
-        subdict = defaultdict(list)
+        numbers = []
 
-        while ii <= breaker:
-            ii, subdict = decode(bin_input, ii, subdict)
+        while ii < breaker:
+            ii, res, final_dict = decode(bin_input, ii, final_dict)
+            numbers.append(res)
 
     # Extraction of subpacket by number of packets
     elif lengthID == 1:
         subpacks = int(bin_input[ii + 1:ii + 12], 2)
         ii += 12
-        subdict = defaultdict(list)
+        numbers = []
 
-        for cnt in range(subpacks):
-            ii, subdict = decode(bin_input, ii, subdict)
+        for _ in range(subpacks):
+            ii, res, final_dict = decode(bin_input, ii, final_dict)
+            numbers.append(res)
 
-    final_dict['versions'] += subdict['versions']
-    final_dict['IDs'] += subdict['IDs']
-    final_dict['literals'].append(appender(subdict['literals'], typeID))
+    # Append value from operation on subpackets
+    value = operator(numbers, typeID)
+    final_dict['value'] = value
+    return ii, value, final_dict
 
-    return ii, final_dict
 
-
-def appender(subpack, id):
+def operator(subpack, id):
     if id == 0:
         return sum(subpack)
     elif id == 1:
@@ -78,35 +78,12 @@ def appender(subpack, id):
     return
 
 
-def tester(ids, literals, litcnt):
-    for ii in range(len(ids)):
-        if ids[ii] == 4:
-            lit = literals[litcnt]
-            litcnt += 1
-            return lit
-        else:
-            return tester(ids[ii:], literals, litcnt)
-
 with open(file, 'r') as f:
     hex_data = f.read()
 
 bin_data = hex_to_bin(hex_data)
 
-# Assertions for part 1 #
-assert sum(decode(hex_to_bin('8A004A801A8002F478'), 0, defaultdict(list))[1]['versions']) == 16
-assert sum(decode(hex_to_bin('620080001611562C8802118E34'), 0, defaultdict(list))[1]['versions']) == 12
-assert sum(decode(hex_to_bin('C0015000016115A2E0802F182340'), 0, defaultdict(list))[1]['versions']) == 23
-assert sum(decode(hex_to_bin('A0016C880162017C3686B18A3D4780'), 0, defaultdict(list))[1]['versions']) == 31
-
-# Assertions for part 2 #
-# assert decode(hex_to_bin('C200B40A82'), 0, defaultdict(list))[1]['literals'][0] == 3
-# assert decode(hex_to_bin('04005AC33890'), 0, defaultdict(list))[1]['literals'][0] == 54
-# assert decode(hex_to_bin('880086C3E88112'), 0, defaultdict(list))[1]['literals'][0] == 7
-# assert decode(hex_to_bin('CE00C43D881120'), 0, defaultdict(list))[1]['literals'][0] == 9
-# assert decode(hex_to_bin('D8005AC2A8F0'), 0, defaultdict(list))[1]['literals'][0] == 1
-# assert decode(hex_to_bin('F600BC2D8F'), 0, defaultdict(list))[1]['literals'][0] == 0
-# assert decode(hex_to_bin('9C005AC2F8F0'), 0, defaultdict(list))[1]['literals'][0] == 0
-# assert decode(hex_to_bin('9C0141080250320F1802104A08'), 0, defaultdict(list))[1]['literals'][0] == 1
-
-res_1 = sum(decode(bin_data, 0, defaultdict(list))[1]['versions'])
+res_1 = sum(decode(bin_data, 0, defaultdict(list))[2]['versions'])
+res_2 = decode(bin_data, 0, defaultdict(list))[1]
 print(f'Part 1: {res_1}')
+print(f'Part 2: {res_2}')
