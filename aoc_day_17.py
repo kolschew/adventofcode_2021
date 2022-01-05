@@ -57,12 +57,12 @@ def find_highest():
 
 def find_initials():
     cnt = 0
-    for x in range(_xarea[1] + 1):
-        for y in range(_yarea[0] - 1, -_yarea[0] + 2):
+    for x in range(18, _xarea[1] + 1):
+        for y in range(_yarea[0], 60):
             if Trajectory(x, y).hits_target():
                 cnt += 1
     return cnt
 
 
-print(f'Part 1: {find_highest()}')
-print(f'Part 2: {find_initials()}')
+#print(f'Part 1: {find_highest()}')
+#print(f'Part 2: {find_initials()}')
